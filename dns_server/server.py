@@ -1,6 +1,11 @@
 from dnslib import DNSRecord, DNSHeader, RR, A, QTYPE   # pip install dnslib
 import socket, logging
 
+# tests/conftest.py
+import sys, pathlib
+root = pathlib.Path(__file__).resolve().parents[1]
+sys.path.append(str(root))
+
 
 ZONE = {                   # hard‑coded zone
     "example.com.": "93.184.216.34",
@@ -18,6 +23,7 @@ def serve(host="0.0.0.0", port=53):
     logging.info("DNS server listening on %s:%d", host, port)
 
     while True:
+        
         data, addr = sock.recvfrom(512)
         request = DNSRecord.parse(data)
         qname = str(request.q.qname)
